@@ -39,6 +39,10 @@ incCell (xs,e,ys) = (xs,e+1,ys)
 decCell :: Stack -> Stack
 decCell (xs,e,ys) = (xs,e-1,ys)
 
+bfTail :: [a] -> [a]
+bfTail [] = []
+bfTail l = tail l
+
 -- monadic ops
 
 mIncPtr :: BFState ()
@@ -76,7 +80,7 @@ bfInt (c:cs) = case c of
                     '[' -> do
                             p <- mIsZero
                             if p
-                            then bfInt (tail . dropWhile (/=']') $ cs)
+                            then bfInt (bfTail . dropWhile (/=']') $ cs)
                             else let loopcode = takeWhile (/=']') cs in do
                                                                             bfInt loopcode
                                                                             bfInt (c:cs)
