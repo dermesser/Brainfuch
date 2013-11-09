@@ -25,13 +25,13 @@ type BFState = StateT Stack IO
 emptyStack :: Stack
 emptyStack = ([],0,[])
 
-incPtr :: Stack -> Stack
-incPtr ([],e,ys) = ([],0,e:ys)
-incPtr (xs,e,ys) = (init xs,last xs,e:ys)
-
 decPtr :: Stack -> Stack
-decPtr (xs,e,[]) = (xs++[e],0,[])
-decPtr (xs,e,y:ys) = (xs++[e],y,ys)
+decPtr ([],e,ys) = ([],0,e:ys)
+decPtr (xs,e,ys) = (init xs,last xs,e:ys)
+
+incPtr :: Stack -> Stack
+incPtr (xs,e,[]) = (xs++[e],0,[])
+incPtr (xs,e,y:ys) = (xs++[e],y,ys)
 
 incCell :: Stack -> Stack
 incCell (xs,e,ys) = (xs,e+1,ys)
