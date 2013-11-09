@@ -92,4 +92,4 @@ bfExec :: Code -> IO ()
 bfExec c = runStateT (bfInt c) emptyStack >> return ()
 
 bfExecS :: Code -> IO Stack
-bfExecS c = runStateT (bfInt c) emptyStack >>= \(_,s) -> putStrLn "" >> print s >> return s
+bfExecS c = runStateT (bfInt c) emptyStack >>= \(_,s) -> return s
