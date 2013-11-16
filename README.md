@@ -1,29 +1,41 @@
 # Brainfuch - A Haskell Brainfuck interpreter
 
-Brainfuch is a Brainfuck interpreter written in Haskell. Except for
-just interpreting Brainfuck code (executable BFexec) it may also used
-for debugging Brainfuck code (executable BFfollow).
+Brainfuch is a Brainfuck interpreter library written in Haskell shipped
+with different executable interpreters
 
-Example session, interpretation only (text after # is comment):
+*Note:* Stack *means here the virtual tape used by Brainfuck; a piece of Brainfuck code is called* script.
 
-    ++>-->,. # Code, from stdin
-    [EOF]; Interpreting code # Interpreter output
+## BFexec
+
+The standard interpreter. Reads code, evaluates it, prints any outputs made by the program
+and the final state of the stack.
+
+Example session, interpretation only (text after # is a comment):
+
+    ++>-->,. # User input
+    [EOF]; Interpreting code
     78 # User input
-    78 # Program output
-    Current stack: # Status output
-    ([2,-2],78,[]) # Last stack state
+    78 # The script's output
+    Current stack:
+    ([2,-2],78,[])
 
-Example session, with debugging (text after # is comment):
+## BFdbg
+
+BFdbg not only evaluates a script but also prints every step made on the way to the final result.
+
+Columns: \<Command\> \<Stack after this command\>
+
+Stack format: [x] = inactive cell; {x} = current cell
+
+Example session, with debugging (text after # is a comment):
 
     ++>-->,.><<< # Code from stdin
 
-    Output of script: # Interpreter output
+    Output of script:
     99 # User input
-    99 # Brainfuck output
+    99 # Script output
 
-    Stack states during interpretation: # Interpreter output
-    # Columns: <Command> <Stack after this command>
-    # Stack format: [x] = inactive cell; {x} = current cell
+    Stack states during interpretation:
     +  {1}
     +  {2}
     >  [2]{0}
@@ -37,7 +49,10 @@ Example session, with debugging (text after # is comment):
     <  [2]{-2}[99][0]
     <  {2}[-2][99][0]
 
-Example session with debugging, II (*multiplication: 4 x 4*):
+## BFdbgIA
+
+BFdbgIA stands for "BrainFuck DeBuGger InterActive". That means the interpreter prints the successive
+steps not as a list as BFdbg does but sequentially on one line which is updated every second.
 
     ++++[>++++<-]
 
@@ -45,35 +60,14 @@ Example session with debugging, II (*multiplication: 4 x 4*):
 
 
     Stack states during interpretation:
-    +  {1}
-    +  {2}
-    +  {3}
-    +  {4}
-    >  [4]{0}
-    +  [4]{1}
-    +  [4]{2}
-    +  [4]{3}
-    +  [4]{4}
-    <  {4}[4]
-    -  {3}[4]
-    >  [3]{4}
-    +  [3]{5}
-    +  [3]{6}
-    +  [3]{7}
-    +  [3]{8}
-    <  {3}[8]
-    -  {2}[8]
-    >  [2]{8}
-    +  [2]{9}
-    +  [2]{10}
-    +  [2]{11}
-    +  [2]{12}
-    <  {2}[12]
-    -  {1}[12]
-    >  [1]{12}
-    +  [1]{13}
-    +  [1]{14}
-    +  [1]{15}
-    +  [1]{16}
-    <  {1}[16]
-    -  {0}[16]
+    +  [4]{2}   (/)
+
+and after a second
+
+    ++++[>++++<-]
+
+    Output of script:
+
+
+    Stack states during interpretation:
+    +  [4]{3}   (-)
