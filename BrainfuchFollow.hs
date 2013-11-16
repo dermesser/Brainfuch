@@ -32,16 +32,16 @@ type BFFState = WriterT [StackCode] (StateT Stack IO)
 -- monadic ops
 
 mIncPtr :: BFFState ()
-mIncPtr = WriterT $ StateT $ \s -> return (((),[(incPtr s,'>')]),incPtr s)
+mIncPtr = WriterT $ StateT $ \s -> let s' = incPtr s in return (((),[(s','>')]),s')
 
 mDecPtr :: BFFState ()
-mDecPtr = WriterT $ StateT $ \s -> return (((),[(decPtr s,'<')]),decPtr s)
+mDecPtr = WriterT $ StateT $ \s -> let s' = decPtr s in return (((),[(s','<')]),s')
 
 mIncCell :: BFFState ()
-mIncCell = WriterT $ StateT $ \s -> return (((),[(incCell s,'+')]),incCell s)
+mIncCell = WriterT $ StateT $ \s -> let s' = incCell s in return (((),[(s','+')]),s')
 
 mDecCell :: BFFState ()
-mDecCell = WriterT $ StateT $ \s -> return (((),[(decCell s,'-')]),decCell s)
+mDecCell = WriterT $ StateT $ \s -> let s' = decCell s in return (((),[(s','-')]),s')
 
 mPrintContent :: BFFState ()
 mPrintContent = WriterT $ StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
