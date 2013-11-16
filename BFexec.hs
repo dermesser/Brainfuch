@@ -2,7 +2,7 @@ module Main where
 
 import System.IO
 
-import Brainfuch
+import BFLib.Brainfuch
 
 main = do
         code <- readCode
@@ -14,8 +14,8 @@ main = do
 readCode = do
     eof <- isEOF
     if eof
-    then return ""
-    else do
-        ln <- getLine
-        lns <- readCode
-        return (ln++lns)
+     then return ""
+     else do
+         ln <- getLine
+         lns <- readCode
+         return (ln++lns)

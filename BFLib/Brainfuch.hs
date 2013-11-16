@@ -1,4 +1,4 @@
-module Brainfuch where
+module BFLib.Brainfuch where
 
 import Control.Monad.Trans.State
 import System.IO
@@ -80,10 +80,10 @@ bfInt (c:cs) = case c of
                     '[' -> do
                             p <- mIsZero
                             if p
-                            then bfInt (bfTail . dropWhile (/=']') $ cs)
-                            else let loopcode = takeWhile (/=']') cs in do
-                                                                            bfInt loopcode
-                                                                            bfInt (c:cs)
+                             then bfInt (bfTail . dropWhile (/=']') $ cs)
+                             else let loopcode = takeWhile (/=']') cs in do
+                                                                             bfInt loopcode
+                                                                             bfInt (c:cs)
                     _ -> bfInt cs
 
 -- Entry points

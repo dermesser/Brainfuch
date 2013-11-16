@@ -1,10 +1,10 @@
-module BrainfuchFollow where
+module BFLib.BrainfuchFollow where
 
 import Control.Monad.State
 import Control.Monad.Writer
 import System.IO
 
-import Brainfuch (Code
+import BFLib.Brainfuch (Code
         , Stack
         , bfTail
         , emptyStack
@@ -32,22 +32,27 @@ type BFFState = WriterT [StackCode] (StateT Stack IO)
 -- monadic ops
 
 mIncPtr :: BFFState ()
-mIncPtr = WriterT $ StateT $ \s -> let s' = incPtr s in return (((),[(s','>')]),s')
+mIncPtr = WriterT $ StateT $ \s -> let s' = incPtr s
+                                   in return (((),[(s','>')]),s')
 
 mDecPtr :: BFFState ()
-mDecPtr = WriterT $ StateT $ \s -> let s' = decPtr s in return (((),[(s','<')]),s')
+mDecPtr = WriterT $ StateT $ \s -> let s' = decPtr s
+                                   in return (((),[(s','<')]),s')
 
 mIncCell :: BFFState ()
-mIncCell = WriterT $ StateT $ \s -> let s' = incCell s in return (((),[(s','+')]),s')
+mIncCell = WriterT $ StateT $ \s -> let s' = incCell s
+                                    in return (((),[(s','+')]),s')
 
 mDecCell :: BFFState ()
-mDecCell = WriterT $ StateT $ \s -> let s' = decCell s in return (((),[(s','-')]),s')
+mDecCell = WriterT $ StateT $ \s -> let s' = decCell s
+                                    in return (((),[(s','-')]),s')
 
 mPrintContent :: BFFState ()
 mPrintContent = WriterT $ StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
 
 mReadContent :: BFFState ()
-mReadContent = WriterT $ StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys) in return (((),[(s',',')]),s')
+mReadContent = WriterT $ StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys)
+                                                                 in return (((),[(s',',')]),s')
 
 mIsZero :: BFFState Bool
 mIsZero = WriterT $ StateT $ \s@(_,e,_) -> return ((e == 0,[]),s)
@@ -66,16 +71,9 @@ bfInt (c:cs) = case c of
                     '[' -> do
                             p <- mIsZero
                             if p
-                            then bfInt (bfTail . dropWhile (/=']') $ cs)
-                            else let loopcode = takeWhile (/=']') cs in do
-                                                                            bfInt loopcode
-                                                                            bfInt (c:cs)
+                             then bfInt (bfTail . dropWhile (/=']') $ cs)
+                             else let loopcode = takeWhile (/=']') cs in do
+                                                                             bfInt loopcode
+                                                                             bfInt (c:cs)
                     _ -> bfInt cs
 
--- Entry points
-
-bfExec :: Code -> IO ()
-bfExec c = runStateT (runWriterT (bfInt c)) emptyStack >> return ()
-
-bfExecS :: Code -> IO Stack
-bfExecS c = runStateT (runWriterT (bfInt c)) emptyStack >>= \(_,s) -> return s

@@ -6,8 +6,8 @@ import Control.Concurrent
 import Control.Monad.State
 import Control.Monad.Writer
 
-import Brainfuch (Code, emptyStack, Stack)
-import BrainfuchFollow
+import BFLib.Brainfuch (Code, emptyStack, Stack)
+import BFLib.BrainfuchFollow
 
 main :: IO ()
 main = do
@@ -33,9 +33,9 @@ showStacks stacks = foldl1 (\a e -> a ++ "\n" ++ e) stackstrings
 
 showStack :: StackCode -> String
 showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ showRight)
-        where showLeft = (map (\x -> '[' : show x ++ "]") xs)
-              showCurrent = ["{" ++ show y ++ "}"]
-              showRight = (map (\z -> '[' : show z ++ "]") zs)
+    where showLeft = (map (\x -> '[' : show x ++ "]") xs)
+          showCurrent = ["{" ++ show y ++ "}"]
+          showRight = (map (\z -> '[' : show z ++ "]") zs)
 
 sleep :: IO ()
 sleep = threadDelay sleeptime
@@ -47,8 +47,8 @@ readCode :: IO Code
 readCode = do
     eof <- isEOF
     if eof
-    then return ""
-    else do
-        ln <- getLine
-        lns <- readCode
-        return (ln++lns)
+     then return ""
+     else do
+         ln <- getLine
+         lns <- readCode
+         return (ln++lns)
