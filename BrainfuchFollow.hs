@@ -47,7 +47,7 @@ mPrintContent :: BFFState ()
 mPrintContent = WriterT $ StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
 
 mReadContent :: BFFState ()
-mReadContent = WriterT $ StateT $ \s@(xs,_,ys) -> readLn >>= \e -> return (((),[(s,',')]),(xs,e,ys))
+mReadContent = WriterT $ StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys) in return (((),[(s',',')]),s')
 
 mIsZero :: BFFState Bool
 mIsZero = WriterT $ StateT $ \s@(_,e,_) -> return ((e == 0,[]),s)
