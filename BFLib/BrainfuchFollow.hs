@@ -35,30 +35,30 @@ bffTell :: StackCode -> BFFState ()
 bffTell sc = WriterT . StateT $ \s -> return (((),[sc]),s)
 
 mIncPtr :: BFFState ()
-mIncPtr = WriterT $ StateT $ \s -> let s' = incPtr s
+mIncPtr = WriterT . StateT $ \s -> let s' = incPtr s
                                    in return (((),[(s','>')]),s')
 
 mDecPtr :: BFFState ()
-mDecPtr = WriterT $ StateT $ \s -> let s' = decPtr s
+mDecPtr = WriterT . StateT $ \s -> let s' = decPtr s
                                    in return (((),[(s','<')]),s')
 
 mIncCell :: BFFState ()
-mIncCell = WriterT $ StateT $ \s -> let s' = incCell s
+mIncCell = WriterT . StateT $ \s -> let s' = incCell s
                                     in return (((),[(s','+')]),s')
 
 mDecCell :: BFFState ()
-mDecCell = WriterT $ StateT $ \s -> let s' = decCell s
+mDecCell = WriterT . StateT $ \s -> let s' = decCell s
                                     in return (((),[(s','-')]),s')
 
 mPrintContent :: BFFState ()
-mPrintContent = WriterT $ StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
+mPrintContent = WriterT . StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
 
 mReadContent :: BFFState ()
-mReadContent = WriterT $ StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys)
+mReadContent = WriterT . StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys)
                                                                  in return (((),[(s',',')]),s')
 
 mIsZero :: BFFState Bool
-mIsZero = WriterT $ StateT $ \s@(_,e,_) -> return ((e == 0,[]),s)
+mIsZero = WriterT . StateT $ \s@(_,e,_) -> return ((e == 0,[]),s)
 
 -- Interpreter
 
