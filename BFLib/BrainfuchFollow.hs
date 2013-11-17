@@ -31,6 +31,9 @@ type BFFState = WriterT [StackCode] (StateT Stack IO)
 
 -- monadic ops
 
+bffTell :: StackCode -> BFFState ()
+bffTell sc = WriterT . StateT $ \s -> return (((),[sc]),s)
+
 mIncPtr :: BFFState ()
 mIncPtr = WriterT $ StateT $ \s -> let s' = incPtr s
                                    in return (((),[(s','>')]),s')

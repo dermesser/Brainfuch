@@ -53,7 +53,7 @@ showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ show
           showRight = (map (\z -> '[' : show z ++ "]") zs)
 
 interpret :: Code -> IO [StackCode]
-interpret c = liftM (snd . fst) $ runStateT (runWriterT (bfInt c)) emptyStack
+interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack
 
 readCode :: IO Code
 readCode = do

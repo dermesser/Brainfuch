@@ -41,7 +41,7 @@ sleep :: IO ()
 sleep = threadDelay sleeptime
 
 interpret :: Code -> IO [StackCode]
-interpret c = liftM (snd . fst) $ runStateT (runWriterT (bfInt c)) emptyStack
+interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack
 
 readCode :: IO Code
 readCode = do
