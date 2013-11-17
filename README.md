@@ -36,6 +36,7 @@ Example session, with debugging (text after # is a comment):
     99 # Script output
 
     Stack states during interpretation:
+       {0}
     +  {1}
     +  {2}
     >  [2]{0}
@@ -62,7 +63,7 @@ steps not as a list as BFdbg does but sequentially on one line which is updated 
     Stack states during interpretation:
     +  [4]{2}   (/)
 
-and after a second
+and a second later
 
     ++++[>++++<-]
 
@@ -71,3 +72,5 @@ and after a second
 
     Stack states during interpretation:
     +  [4]{3}   (-)
+
+(looks a bit like what `wget` does)
