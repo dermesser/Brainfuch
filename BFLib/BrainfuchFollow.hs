@@ -52,7 +52,7 @@ mDecCell = WriterT . StateT $ \s -> let s' = decCell s
                                     in return (((),[(s','-')]),s')
 
 mPrintContent :: BFFState ()
-mPrintContent = WriterT . StateT $ \s@(_,e,_) -> (putStr . show) e >> return (((),[(s,'.')]),s)
+mPrintContent = WriterT . StateT $ \s@(_,e,_) -> (putStrLn . show) e >> hFlush stdout >> return (((),[(s,'.')]),s)
 
 mReadContent :: BFFState ()
 mReadContent = WriterT . StateT $ \(xs,_,ys) -> readLn >>= \e -> let s' = (xs,e,ys)

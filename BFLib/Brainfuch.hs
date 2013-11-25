@@ -58,7 +58,7 @@ mDecCell :: BFState ()
 mDecCell = StateT $ \s -> return ((),decCell s)
 
 mPrintContent :: BFState ()
-mPrintContent = StateT $ \s@(_,e,_) -> (putStr . show) e >> return ((),s)
+mPrintContent = StateT $ \s@(_,e,_) -> (putStrLn . show) e >> hFlush stdout >> return ((),s)
 
 mReadContent :: BFState ()
 mReadContent = StateT $ \(xs,_,ys) -> readLn >>= \e -> return ((),(xs,e,ys))
