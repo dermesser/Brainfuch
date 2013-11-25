@@ -74,3 +74,20 @@ and a second later
     +  [4]{3}   (-)
 
 (looks a bit like what `wget` does)
+
+## BFdbgBreakpoint
+
+This version uses the new symbol '|' to set breakpoints at which the current state is saved
+and printed after execution:
+
+    ++++|[>+>+<<-|]
+
+    Output of script:
+
+
+    Stack states during interpretation:
+    {4}
+    {3}[1][1]
+    {2}[2][2]
+    {1}[3][3]
+    {0}[4][4]
