@@ -1,13 +1,13 @@
 module Main where
 
-import BFIOlib
+import System.IO
 import Control.Concurrent
 
 import Control.Monad.State
 import Control.Monad.Writer
 
 import BFLib.Brainfuch (Code, emptyStack, Stack)
-import BFLib.BrainfuchFollow
+import BFLib.BrainfuchBreakpoint
 
 main :: IO ()
 main = do
@@ -17,17 +17,38 @@ main = do
         putStr "\n\nStack states during interpretation:\n"
         putStrLn $ showStacks stacks
 
+-- Constants
+
+sleeptime :: Int
+sleeptime = round 1e6
+
+deleteLine :: String
+deleteLine = "\r\ESC[K"
+
 -- Code
 
-showStacks :: [StackCode] -> String
+showStacks :: [Stack] -> String
 showStacks stacks = foldl1 (\a e -> a ++ "\n" ++ e) stackstrings
     where stackstrings = map showStack stacks
 
-showStack :: StackCode -> String
-showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ showRight)
+showStack :: Stack -> String
+showStack (xs,y,zs) = concat (showLeft ++ showCurrent ++ showRight)
     where showLeft = (map (\x -> '[' : show x ++ "]") xs)
           showCurrent = ["{" ++ show y ++ "}"]
           showRight = (map (\z -> '[' : show z ++ "]") zs)
 
-interpret :: Code -> IO [StackCode]
-interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack
+sleep :: IO ()
+sleep = threadDelay sleeptime
+
+interpret :: Code -> IO [Stack]
+interpret c = liftM (snd . fst) $ runStateT (runWriterT $ bfInt c) emptyStack
+
+readCode :: IO Code
+readCode = do
+    eof <- isEOF
+    if eof
+     then return ""
+     else do
+         ln <- getLine
+         lns <- readCode
+         return (ln++lns)

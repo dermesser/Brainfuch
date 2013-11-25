@@ -29,3 +29,8 @@ executable BFdbgIA
     main-is: BFdbgIA.hs
     -- other-modules:
     build-depends:       base >=4.6, mtl >=2.1, transformers >=0.3
+
+executable BFdbgIA
+    main-is: BFdbgBreakpoint.hs
+    -- other-modules:
+    build-depends:       base >=4.6, mtl >=2.1, transformers >=0.3

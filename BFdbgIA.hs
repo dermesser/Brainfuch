@@ -1,5 +1,6 @@
 module Main where
 
+import BFIOlib
 import System.IO
 import Control.Concurrent
 
@@ -46,22 +47,6 @@ showWaitDelete stack = do
 progressRotateSyms :: String
 progressRotateSyms = "-\\|/-|/"
 
-showStack :: StackCode -> String
-showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ showRight)
-    where showLeft = (map (\x -> '[' : show x ++ "]") xs)
-          showCurrent = ["{" ++ show y ++ "}"]
-          showRight = (map (\z -> '[' : show z ++ "]") zs)
 
 interpret :: Code -> IO [StackCode]
 interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack
-
-readCode :: IO Code
-readCode = do
-    eof <- isEOF
-    if eof
-     then return ""
-     else do
-         ln <- getLine
-         lns <- readCode
-         return (ln++lns)
-
