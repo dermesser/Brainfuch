@@ -1,7 +1,10 @@
 # Brainfuch - A Haskell Brainfuck interpreter
 
 Brainfuch is a Brainfuck interpreter library written in Haskell shipped
-with different executable interpreters
+with different executable interpreters.
+
+CURRENT FLAWS:
+- Does not handle nested loops correctly.
 
 *Note:* Stack *means here the virtual tape used by Brainfuck; a piece of Brainfuck code is called* script.
 
