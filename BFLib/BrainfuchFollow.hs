@@ -11,7 +11,9 @@ import BFLib.Brainfuch (Code
         , incPtr
         , decPtr
         , incCell
-        , decCell)
+        , decCell
+        , bfGetLoop
+        , bfDropLoop)
 {-
     - Syntax
 
@@ -65,7 +67,7 @@ mIsZero = WriterT . StateT $ \s@(_,e,_) -> return ((e == 0,[]),s)
 
 bfInt :: Code -> BFFState ()
 bfInt [] = return ()
-bfInt (c:cs) = case c of
+bfInt allc@(c:cs) = case c of
                     '>' -> mIncPtr >> bfInt cs
                     '<' -> mDecPtr >> bfInt cs
                     '+' -> mIncCell >> bfInt cs
@@ -73,11 +75,11 @@ bfInt (c:cs) = case c of
                     '.' -> mPrintContent >> bfInt cs
                     ',' -> mReadContent >> bfInt cs
                     '[' -> do
-                            p <- mIsZero
-                            if p
-                             then bfInt (bfTail . dropWhile (/=']') $ cs)
-                             else let loopcode = takeWhile (/=']') cs in do
-                                                                             bfInt loopcode
-                                                                             bfInt (c:cs)
+                        p <- mIsZero
+                        if p
+                         then bfInt . bfDropLoop $ allc
+                         else let loopcode = bfGetLoop allc in do
+                                                             bfInt loopcode
+                                                             bfInt (c:cs)
                     _ -> bfInt cs
 

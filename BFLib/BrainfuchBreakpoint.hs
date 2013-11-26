@@ -11,7 +11,9 @@ import BFLib.Brainfuch (Code
         , incPtr
         , decPtr
         , incCell
-        , decCell)
+        , decCell
+        , bfGetLoop
+        , bfDropLoop)
 {-
     - Syntax
 

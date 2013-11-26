@@ -47,6 +47,5 @@ showWaitDelete stack = do
 progressRotateSyms :: String
 progressRotateSyms = "-\\|/-|/"
 
-
 interpret :: Code -> IO [StackCode]
 interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack

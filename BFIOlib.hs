@@ -13,3 +13,9 @@ readCode = do
          ln <- getLine
          lns <- readCode
          return (ln++lns)
+
+showStack :: StackCode -> String
+showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ showRight)
+    where showLeft = (map (\x -> '[' : show x ++ "]") xs)
+          showCurrent = ["{" ++ show y ++ "}"]
+          showRight = (map (\z -> '[' : show z ++ "]") zs)

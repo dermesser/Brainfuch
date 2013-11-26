@@ -23,11 +23,6 @@ showStacks :: [StackCode] -> String
 showStacks stacks = foldl1 (\a e -> a ++ "\n" ++ e) stackstrings
     where stackstrings = map showStack stacks
 
-showStack :: StackCode -> String
-showStack ((xs,y,zs),c) = [c] ++ "  " ++ concat (showLeft ++ showCurrent ++ showRight)
-    where showLeft = (map (\x -> '[' : show x ++ "]") xs)
-          showCurrent = ["{" ++ show y ++ "}"]
-          showRight = (map (\z -> '[' : show z ++ "]") zs)
 
 interpret :: Code -> IO [StackCode]
 interpret c = liftM (snd . fst) $ runStateT (runWriterT (bffTell (emptyStack,' ') >> bfInt c)) emptyStack
