@@ -6,6 +6,7 @@ import Control.Concurrent
 import Control.Monad.State
 import Control.Monad.Writer
 
+import BFIOlib
 import BFLib.Brainfuch (Code, emptyStack, Stack)
 import BFLib.BrainfuchBreakpoint
 
@@ -17,19 +18,11 @@ main = do
         putStr "\n\nStack states during interpretation:\n"
         putStrLn $ showStacks stacks
 
--- Constants
-
-sleeptime :: Int
-sleeptime = round 1e6
-
-deleteLine :: String
-deleteLine = "\r\ESC[K"
-
 -- Code
 
 showStacks :: [Stack] -> String
 showStacks stacks = foldl1 (\a e -> a ++ "\n" ++ e) stackstrings
-    where stackstrings = map showStack stacks
+    where stackstrings = map Main.showStack stacks
 
 showStack :: Stack -> String
 showStack (xs,y,zs) = concat (showLeft ++ showCurrent ++ showRight)
@@ -37,18 +30,5 @@ showStack (xs,y,zs) = concat (showLeft ++ showCurrent ++ showRight)
           showCurrent = ["{" ++ show y ++ "}"]
           showRight = (map (\z -> '[' : show z ++ "]") zs)
 
-sleep :: IO ()
-sleep = threadDelay sleeptime
-
 interpret :: Code -> IO [Stack]
 interpret c = liftM (snd . fst) $ runStateT (runWriterT $ bfInt c) emptyStack
-
-readCode :: IO Code
-readCode = do
-    eof <- isEOF
-    if eof
-     then return ""
-     else do
-         ln <- getLine
-         lns <- readCode
-         return (ln++lns)
