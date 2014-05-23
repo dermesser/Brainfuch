@@ -1,7 +1,9 @@
 module BFLib.Brainfuch where
 
-import Control.Monad.Trans.State
+import Data.Char
 import System.IO
+
+import Control.Monad.State
 
 type Code = String
 
@@ -58,7 +60,7 @@ mDecCell :: BFState ()
 mDecCell = StateT $ \s -> return ((),decCell s)
 
 mPrintContent :: BFState ()
-mPrintContent = StateT $ \s@(_,e,_) -> (putStrLn . show) e >> hFlush stdout >> return ((),s)
+mPrintContent = StateT $ \s@(_,e,_) -> (putStrLn . (:[]) . chr) e >> hFlush stdout >> return ((),s)
 
 mReadContent :: BFState ()
 mReadContent = StateT $ \(xs,_,ys) -> readLn >>= \e -> return ((),(xs,e,ys))
